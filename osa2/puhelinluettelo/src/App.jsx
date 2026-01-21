@@ -15,7 +15,7 @@ const App = () => {
 
     console.log('fetching data');
     const fetchData = async () => {
-      const response = await axios.get('http://localhost:3001/api/persons')
+      const response = await axios.get('/api/persons')
       setPersons(response.data)
       console.log('data fetched');
     }
