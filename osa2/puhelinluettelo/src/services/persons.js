@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = 'https://fullstackopen-6b2m.onrender.com'
+const baseUrl = '/api/persons'
 
 export const getAllPersons = async () => {
     const response = await axios.get(baseUrl)
