@@ -9,7 +9,21 @@ export const getAllPersons = async () => {
 
 export const create = async (newPerson) => {
     const response = await axios.post(baseUrl, newPerson)
-    return response.data
+    
+    console.log(response)
+
+    if (response.status !== 200 && response.status !== 201){
+        const msg = response.data.error || 'Unknown error'
+        alert(`Failed to create person: ${msg}`)
+        return {
+            success: false,
+            data: msg
+        }
+    }
+    return {
+        success: true,
+        data: response.data
+    }
 }
 export const update = async (id, updatedPerson) => {
     const response = await axios.put(`${baseUrl}/${id}`, updatedPerson)

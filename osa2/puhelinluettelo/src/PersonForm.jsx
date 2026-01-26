@@ -15,7 +15,7 @@ export const PersonForm = ({ addNewPerson, newName, handleNewName, newNumber, se
         </div>
         <div>
             <button type="submit"
-            onClick={addNewPerson}
+            onClick={async () => await addNewPerson() }
             >add</button>
             </div>
         </div>

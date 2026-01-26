@@ -10,6 +10,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [errorText, setErrorText] = useState(null)
 
   useEffect(() => {
 
@@ -30,8 +31,9 @@ const App = () => {
 
   }
 
-  const addNewPerson = () => {
+  const addNewPerson = async () => {
 
+    setErrorText(null)
     const exists = persons.find(person => person.name === newName)
 
     if (exists){
@@ -42,9 +44,17 @@ const App = () => {
         return
     }
 
-    create({name: newName, number: newNumber})
-    setPersons(persons.concat({name: newName, number: newNumber}))
-    setNewName('')
+    const res = await create({name: newName, number: newNumber})
+    
+    if (res.success){
+        setPersons(persons.concat(res.data))
+        setNewName('')
+    }
+    else {
+        console.log('Failed to add new person')
+        setErrorText(res.data)
+    }
+    
 
 
   }
@@ -52,6 +62,13 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+
+      {errorText &&
+        <div style={{border: '2px solid red', padding: '10px', marginBottom: '10px'}}>
+          <p style={{color: 'red'}}>{errorText}</p>
+        </div>
+      }
+
       <form>
 
         <h3>search name</h3>
