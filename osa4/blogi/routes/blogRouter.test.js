@@ -121,6 +121,19 @@ describe('Test blog api', () => {
         }
     })
 
+    test('new blog return 404 if no token', async () => {
+        const newBlog = {
+            title: 'notoken',
+            author : 'notoken',
+            url: 'notoken',
+            likes: 1
+        }
+        await api
+            .post('/api/blogs')
+            .send(newBlog)
+            .expect(400)
+    })
+
     test('undefined likes set to 0', async () => {
         const newBlog = {
             title: 'neljas blogi',
@@ -137,7 +150,7 @@ describe('Test blog api', () => {
             .send(newBlog)
             .set('Authorization', `Bearer ${userToken}`)
             .expect(201)
-            
+
         if (res.body.likes !== 0) {
             throw new Error('Likes not set to 0 when undefined')
         }
