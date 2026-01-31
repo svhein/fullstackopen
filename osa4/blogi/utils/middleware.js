@@ -25,11 +25,11 @@ const errorHandler = (error, request, response, next) => {
 }
 
 const tokenExtractor = (request, response, next) => {  
-  console.log('extracting token from request')
+  // console.log('extracting token from request')
   const tokenString = request.get('authorization')
   const token = tokenString ? tokenString.replace('Bearer ', '') : null
   request.token = token
-  console.log('extracted token:', request.token)
+  // console.log('extracted token:', request.token)
   next()
 }
 

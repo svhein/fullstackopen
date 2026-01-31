@@ -98,6 +98,7 @@ blogRouter.delete('/:id', async (request, response) => {
 })
 
 blogRouter.put('/:id', async (request, response) => {
+  console.log('update blog request')
   const newBlog = request.body
   const res = await Blog.findByIdAndUpdate(request.params.id, newBlog, { new: true })
   response.json(res)

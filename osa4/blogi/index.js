@@ -6,9 +6,14 @@ const Blog = require('./models/blog.js')
 const blogRouter = require('./routes/blogRouter.js')
 const userRouter = require('./routes/userRouter.js')
 const loginRouter = require('./routes/loginRouter.js')
+const testRouter = require('./routes/testRouter.js')
 const { tokenExtractor, userExtractor } = require('./utils/middleware.js')
-
+const cors = require('cors')
 const app = express()
+
+app.use(cors({
+  origin: 'http://localhost:5173',
+}))
 
 app.use(express.json())
 
@@ -30,6 +35,7 @@ app.use(userExtractor)
 app.use('/api/blogs', blogRouter)
 app.use('/api/user', userRouter)
 app.use('/api/login', loginRouter)
+app.use('/api/testing', testRouter)
 
 const PORT = 3003
 
