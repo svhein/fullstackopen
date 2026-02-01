@@ -31,11 +31,11 @@ export const Blog = ({ blog }) => {
       <div>
         <div>
           {blog.title} by {blog.author}
-          <button onClick={() => setShowAll(false)}>hide</button>
         </div>
+           <button onClick={() => setShowAll(false)}>hide</button>
         <div>
           <div>{blog.url}</div>
-          <div>likes {likes} <button onClick={handleLike}>like</button></div>
+          <div>likes {likes} <button className='likeButton' onClick={handleLike}>like</button></div>
           {blog.user && <div>by {blog.user.name}</div>}
         </div>
       </div>
@@ -43,9 +43,13 @@ export const Blog = ({ blog }) => {
   }
 
   return (
-    <div class='title-author'>
+    <div>
+      <p class='title-author'>
     {blog.title} by {blog.author}
-    <button class='showAllButton' onClick={() => setShowAll(true)}>view</button>
-  </div>
+      </p>
+      <div>
+         <button class='showAllButton' onClick={() => setShowAll(true)}>view</button>
+      </div>
+    </div>
   )
 }

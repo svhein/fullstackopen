@@ -14,6 +14,9 @@ describe('Blog app', () => {
     console.log('create acconunt res', createAccountRes.status())
 
     await page.goto('http://localhost:5173')
+    await page.evaluate(() => window.localStorage.clear())
+
+
   })
 
   test('Login form is shown', async ({ page }) => {
@@ -26,12 +29,19 @@ describe('Blog app', () => {
   test('login is success', async ({ page }) => {
     await page.getByLabel('username').fill('taneli')
     await page.getByLabel('password').fill('salainen')
-    const loginButton = page.locator('.loginButton')
+
+    const loginResponse = page.waitForResponse(
+    response => response.url().includes('/api/login') && response.status() === 200
+    )
+
+     const loginButton = page.locator('.loginButton')
     await loginButton.click()
-    await page.screenshot({ path: 'afterlogin.png' })
+
+    await loginResponse;  
 
     await expect(page.getByText('taneli logged in')).toBeVisible()
     })
+
 
     test('login fails with wrong password', async ({ page }) => {
         await page.getByLabel('username').fill('taneli')
@@ -53,9 +63,15 @@ describe('Blog app', () => {
         await page.locator('input[id="title"]').fill('uusi blogi')
         await page.locator('input[id="author"]').fill('taneli')
         await page.locator('input[id="url"]').fill('http://f.com')
+
+        // const postRes = page.waitForResponse(response => 
+        // response.url().includes('/api/blogs') && response.status() === 201
+        // );
     
         const createButton = page.locator('.createBlogButton')
         await createButton.click()
+
+        // await postRes;
 
         await page.waitForTimeout(1000)
 
@@ -63,8 +79,36 @@ describe('Blog app', () => {
 
         console.log(await page.content())
 
-        await expect(page.getByText("uusi blogi by taneli")).toBeVisible()
-
+       await expect(page.getByText('uusi blogi by taneli')).toBeVisible({timeout: 10000});
     })
+
+    test('like blog', async ({ page }) => {
+        await page.getByLabel('username').fill('taneli')
+        await page.getByLabel('password').fill('salainen')
+        const loginButton = page.locator('.loginButton')
+
+        const loginResponse = page.waitForResponse(
+        response => response.url().includes('/api/login') && response.status() === 200
+        )
+
+        await loginButton.click()
+
+        await loginResponse;
+
+        const showBlogsButton = page.locator('.showBlogsButton')
+        await showBlogsButton.click()
+        await page.locator('input[id="title"]').fill('uusi blogi')
+        await page.locator('input[id="author"]').fill('taneli')
+        await page.locator('input[id="url"]').fill('http://f.com')
+        const createButton = page.locator('.createBlogButton')
+        await createButton.click()
+        const viewButton = page.locator('.showAllButton')
+        await viewButton.click()
+        const likeButton = page.getByText('like')
+        await likeButton.click()
+        await page.waitForTimeout(1000)
+        await expect(page.getByText('likes 1')).toBeVisible();
+    })
+
 
 })

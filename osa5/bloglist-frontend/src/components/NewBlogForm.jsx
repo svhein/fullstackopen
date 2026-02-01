@@ -18,7 +18,6 @@ export const NewBlogForm = ({ createBlog }) => {
                 <button className='createBlogButton' type="submit">create</button>
             </form>
         </div>
-
     )
 }
 
